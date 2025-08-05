@@ -1,20 +1,32 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-    value : 0,
+    todoo : [],
 };
 
 export const counterSlice = createSlice({
-    name: "counter",
+    name: "todoo",
     initialState,
     reducers:{
-        increase:state => {state.value += 1;},
-        decrease : state => {state.value -= 1;},
-        reset : state => {state.value = 0;},
+        addTodo:(state,action) => {
+            state.todoo.push({
+                id : Date.now(),
+                text : action.payload,
+                completed : false,
+            });
         },
-    }
-);
+        deleteTodo :(state,action) => {
+            state.todoo = state.todoo.filter((t) => t.id !== action.payload)
+        },
+        toggleTodo : (state,action) => {
+            const todo = state.todoo.find((t) => t.id === action.payload)
+            if(todo){
+                todo.completed = !todo.completed;
+            }
+        },
+    },
+});
 
-export const {increase,decrease,reset} = counterSlice.actions;
+export const {addTodo , deleteTodo , toggleTodo} = counterSlice.actions;
 
 export default counterSlice.reducer;
